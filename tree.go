@@ -1,18 +1,19 @@
 package main
 
 import (
-	"github.com/rivo/tview"
 	"strings"
+
+	"github.com/rivo/tview"
 )
 
 var statusColor = map[string]string{
 	"??": "[orange]",
-	"M": "[red]",
+	"M":  "[red]",
 	"MM": "[red]",
 }
 
 type Cmd struct {
-	fs []FileStatus
+	fs      []FileStatus
 	pstatus string
 }
 
@@ -22,10 +23,7 @@ func ui() (*tview.Application, chan Cmd) {
 	tree := tview.NewTreeView().SetRoot(root).SetCurrentNode(root)
 	pstatus := tview.NewTextView().SetDynamicColors(true)
 
-	layout := tview.NewFlex().SetDirection(tview.FlexRow)
-		.AddItem(tree, 0, 1, true)
-		.AddItem(pstatus, 1, 0, false)
-
+	layout := tview.NewFlex().SetDirection(tview.FlexRow).AddItem(tree, 0, 1, true).AddItem(pstatus, 1, 0, false)
 	cmds := make(chan Cmd)
 	go func() {
 		for {
@@ -43,7 +41,7 @@ func ui() (*tview.Application, chan Cmd) {
 
 func mktree(title string, entries []FileStatus) *tview.TreeNode {
 	root := tview.NewTreeNode(title)
-	nodeMap := map[string] * tview.TreeNode{"": root}
+	nodeMap := map[string]*tview.TreeNode{"": root}
 
 	for _, entry := range entries {
 		parts := strings.Split(entry.File, "/")
@@ -58,7 +56,7 @@ func mktree(title string, entries []FileStatus) *tview.TreeNode {
 			path += part
 			if _, exists := nodeMap[path]; !exists {
 				color := ""
-				if i == len(parts) - 1 {
+				if i == len(parts)-1 {
 					color = statusColor[entry.Status]
 				}
 				node := tview.NewTreeNode(color + part)

@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"os/exec"
+	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -15,7 +18,7 @@ func gitTopDir() string {
 }
 
 type FileStatus struct {
-	File string
+	File   string
 	Status string
 }
 
@@ -28,16 +31,16 @@ func gitStatus() ([]FileStatus, error) {
 
 	var statuses []FileStatus
 	lines := strings.Split(strings.TrimSpace(string(out)), "\n")
-	blankRe := regexp.MustCompile(\s+)
+	blankRe := regexp.MustCompile("\\s+")
 
 	for _, line := range lines {
 		parts := blankRe.Split(strings.TrimSpace(line), 2)
 		if len(parts) != 2 {
 			continue
 		}
-		statuses = append(statses, FileStatus{
+		statuses = append(statuses, FileStatus{
 			Status: parts[0],
-			File: parts[1],
+			File:   parts[1],
 		})
 	}
 	return statuses, nil

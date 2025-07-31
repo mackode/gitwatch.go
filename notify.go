@@ -15,14 +15,14 @@ func NewNotifier() *Notifier {
 	return &Notifier{}
 }
 
-func (n *Notifer) Wait() {
+func (n *Notifier) Wait() {
 	select {
 	case <-n.watcher.Events:
 	case <-n.watcher.Errors:
 	}
 }
 
-func (n *Notifer) Start(rootDir string) {
+func (n *Notifier) Start(rootDir string) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		panic(err)
